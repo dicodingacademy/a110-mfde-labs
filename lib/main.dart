@@ -1,70 +1,65 @@
 import 'package:flutter/material.dart';
 
-class MyAppBar extends StatelessWidget {
-  MyAppBar({this.title});
+void main() => runApp(MyApp());
 
-  // Fields in a Widget subclass are always marked "final".
-
-  final Widget title;
+class MyApp extends StatelessWidget {
+  final appTitle = 'Drawer Demo';
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 56.0, // in logical pixels
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(color: Colors.blue[500]),
-      // Row is a horizontal, linear layout.
-      child: Row(
-        // <Widget> is the type of items in the list.
-        children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.menu),
-            tooltip: 'Navigation menu',
-            onPressed: null, // null disables the button
-          ),
-          // Expanded expands its child to fill the available space.
-          Expanded(
-            child: title,
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: null,
-          ),
-        ],
-      ),
+    return MaterialApp(
+      title: appTitle,
+      home: MyHomePage(title: appTitle),
     );
   }
 }
 
-class MyScaffold extends StatelessWidget {
+class MyHomePage extends StatelessWidget {
+  final String title;
+
+  MyHomePage({Key key, this.title}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    // Material is a conceptual piece of paper on which the UI appears.
-    return Material(
-      // Column is a vertical, linear layout.
-      child: Column(
-        children: <Widget>[
-          MyAppBar(
-            title: Text(
-              'Example title',
-              style: Theme.of(context).primaryTextTheme.title,
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Center(child: Text('My Page!')),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the Drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
             ),
-          ),
-          Expanded(
-            child: Center(
-              child: Text('Hello, world!'),
+            ListTile(
+              title: Text('Item 1'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
             ),
-          ),
-        ],
+            ListTile(
+              title: Text('Item 2'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    title: 'My app', // used by the OS task switcher
-    home: MyScaffold(),
-  ));
 }
