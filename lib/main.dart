@@ -1,104 +1,61 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(new MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-        title: 'Flutter Igrendients',
-        theme: new ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: new HomeScreen());
-  }
+//fungsi yang pertama kali di jalankan oleh flutter
+void main() {
+  //new mengartikan pemanggilan sebuah widget,
+  //yang berarti MaterialApp adalah sebuah widget yang dipanggil
+  //runApp mengartikan aplikasi yang akan di run
+  runApp(new MaterialApp(
+    //ini berfungsi ketika aplikasi kita minimize, maka nama title akan muncul
+    title: "Flutter Hero",
+    home: new MyApp(),
+  ));
 }
 
-class HomeScreen extends StatelessWidget {
+//membuat class
+class MyApp extends StatelessWidget{
   @override
+  //setiap membuat widget, harus memberikan hasil / memberikan nilai balik
   Widget build(BuildContext context) {
+    //Scaffold ini jika di native android mengartikan sebuah activity
+    //dimana didalam activity terdapat beberapa view yang akan kita buat
     return new Scaffold(
+      //membuat warna background scaffold
+//        backgroundColor: Colors.white,
       appBar: new AppBar(
-        title: new Text("tes"),
+        //ini berfungsi untuk memberikan warna background pada AppBar Layout
+        backgroundColor: Colors.blue,
+        //leading mengartikan tampilan disebelah kiri pada bagian AppBar Layout
+        leading: new Icon(Icons.home),
+        //ini berfungsi untuk membuat text/title berada ditengah pada AppBar Layout
+        title: new Center(
+          child: new Text("Flutter Hero"),
+        ),
       ),
-      body: new Center(
-        child: CustomScrollView(
-          primary: false,
-          slivers: <Widget>[
-            SliverPadding(
-              padding: const EdgeInsets.all(20.0),
-              sliver: SliverGrid.count(
-                crossAxisSpacing: 10.0,
-                crossAxisCount: 2,
-                children: <Widget>[
-                  new GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Detail()),
-                        );
-                      },
-                      child: new Card(
-                        child: Image.asset(
-                          'assets/chiken.jpg',
-                          fit: BoxFit.fill,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ))
-                ],
-              ),
-            ),
-          ],
+      body: Hero(
+        tag: 'educa62Logo',
+        child: GestureDetector(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HeroExamplePage())),
+          child: Image.asset("images/educa62.png", width: 250.0, height: 100.0,),
         ),
       ),
     );
   }
 }
 
-class Detail extends StatelessWidget {
+class HeroExamplePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Detail Menu"),
+      appBar: AppBar(
+        title: Text('Selected Image'),
+      ),
+      body: Center(
+        child: Hero(
+          tag: 'educa62Logo',
+          child: Image.asset("images/educa62.png"),
         ),
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Image.asset(
-            'assets/chiken.jpg',
-            fit: BoxFit.fill,
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-            child: Text(
-              '1. Preheat oven to 350 degrees F (175 degrees C). Coat a 7x11 inch baking dish with nonstick cooking spray. ',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15.0,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-            child: Text(
-              '2. Pound chicken breasts to 1/4 inch thickness.',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15.0,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-            child: Text(
-              '3. Sprinkle each piece of chicken on both sides with salt and pepper. Place 1 cheese slice and 1 ham slice on top of each breast. Roll up each breast, and secure with a toothpick. Place in baking dish, and sprinkle chicken evenly with bread crumbs.',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15.0,
-              ),
-            ),
-          )
-        ]));
+      ),
+    );
   }
 }
