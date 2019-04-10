@@ -1,61 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_codelabs/model/ingredients.dart';
+import 'package:flutter_codelabs/view/detail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; //json
 
-//fungsi yang pertama kali di jalankan oleh flutter
-void main() {
-  //new mengartikan pemanggilan sebuah widget,
-  //yang berarti MaterialApp adalah sebuah widget yang dipanggil
-  //runApp mengartikan aplikasi yang akan di run
-  runApp(new MaterialApp(
-    //ini berfungsi ketika aplikasi kita minimize, maka nama title akan muncul
-    title: "Flutter Hero",
-    home: new MyApp(),
-  ));
-}
+void main() => runApp(new MyApp());
 
-//membuat class
-class MyApp extends StatelessWidget{
+// App root class
+class MyApp extends StatelessWidget {
+
   @override
-  //setiap membuat widget, harus memberikan hasil / memberikan nilai balik
   Widget build(BuildContext context) {
-    //Scaffold ini jika di native android mengartikan sebuah activity
-    //dimana didalam activity terdapat beberapa view yang akan kita buat
-    return new Scaffold(
-      //membuat warna background scaffold
-//        backgroundColor: Colors.white,
-      appBar: new AppBar(
-        //ini berfungsi untuk memberikan warna background pada AppBar Layout
-        backgroundColor: Colors.blue,
-        //leading mengartikan tampilan disebelah kiri pada bagian AppBar Layout
-        leading: new Icon(Icons.home),
-        //ini berfungsi untuk membuat text/title berada ditengah pada AppBar Layout
-        title: new Center(
-          child: new Text("Flutter Hero"),
-        ),
-      ),
-      body: Hero(
-        tag: 'educa62Logo',
-        child: GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HeroExamplePage())),
-          child: Image.asset("images/educa62.png", width: 250.0, height: 100.0,),
-        ),
-      ),
+    return new MaterialApp(
+        title: 'The Ingredients',
+        home: new IngredientsPage()
     );
   }
 }
 
-class HeroExamplePage extends StatelessWidget {
+// Home page class
+class IngredientsPage extends StatefulWidget {
+
+  IngredientsPage({Key key}) : super(key: key);
+
+  @override
+  _IngredientsPageState createState() => new _IngredientsPageState();
+}
+
+// Home page state class
+class _IngredientsPageState extends State<IngredientsPage> {
+
+  List<Ingredients> ingredients = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Selected Image'),
-      ),
-      body: Center(
-        child: Hero(
-          tag: 'educa62Logo',
-          child: Image.asset("images/educa62.png"),
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("The Ingredients"),
         ),
-      ),
+        body: getBody());
+  }
+
+  getBody() {
+    if (ingredients.length == 0) {
+      return new Center(child: new CircularProgressIndicator());
+    } else {
+      return getListView();
+    }
+  }
+
+  ListView getListView() => new ListView.builder(
+      itemCount: ingredients.length,
+      itemBuilder: (BuildContext context, int position) {
+        return getRow(position);
+      });
+
+  Widget getRow(int i) {
+    return new GestureDetector(
+        child: new Padding(
+            padding: new EdgeInsets.all(10.0),
+            child: new Text("${ingredients[i].strIngredient}")
+        ),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IngredientsDetailPage(ingredients: ingredients[i])
+              )
+          );
+        }
     );
+  }
+
+  loadData() async {
+    String dataURL = "https://www.themealdb.com/api/json/v1/1/list.php?i=list";
+    http.Response response = await http.get(dataURL);
+    var responseJson = json.decode(response.body);
+    if (response.statusCode == 200) {
+      setState(() {
+        ingredients =  (responseJson['meals'] as List).map((p) => Ingredients.fromJson(p)).toList();
+      });
+    } else {
+      throw Exception('Failed to load photos');
+    }
+
   }
 }
