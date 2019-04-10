@@ -1,47 +1,37 @@
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+void main() => runApp(SnackBarDemo());
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 1;
-  final _widgetOptions = [
-    Text('Index 0: Home'),
-    Text('Index 1: Business'),
-    Text('Index 2: School'),
-  ];
-
+class SnackBarDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('BottomNavigationBar Sample'),
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.business), title: Text('Business')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.school), title: Text('School')),
-        ],
-        currentIndex: _selectedIndex,
-        fixedColor: Colors.deepPurple,
-        onTap: _onItemTapped,
+    return MaterialApp(
+      title: 'SnackBar Demo',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('SnackBar Demo'),
+        ),
+        body: SnackBarPage(),
       ),
     );
   }
+}
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+class SnackBarPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: RaisedButton(
+        onPressed: () {
+          final snackBar = SnackBar(
+            content: Text('Yay! A SnackBar!')
+          );
+
+          // Find the Scaffold in the Widget tree and use it to show a SnackBar!
+          Scaffold.of(context).showSnackBar(snackBar);
+        },
+        child: Text('Show SnackBar'),
+      ),
+    );
   }
 }
