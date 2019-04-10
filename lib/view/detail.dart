@@ -30,5 +30,4 @@ class IngredientsDetailPage extends StatelessWidget {
       ],
     );
   }
-
 }
