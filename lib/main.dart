@@ -14,48 +14,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends State<Home> {
+  int _currentIndex = 0;
+
+  final List<Widget> _children = [
+    PlaceholderWidget("chiken"),
+    PlaceholderWidget("sphagety"),
+    PlaceholderWidget("fish")
+  ];
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("tes"),
+        title: new Text("Main Menu"),
       ),
-      body: new Center(
-        child: CustomScrollView(
-          primary: false,
-          slivers: <Widget>[
-            SliverPadding(
-              padding: const EdgeInsets.all(20.0),
-              sliver: SliverGrid.count(
-                crossAxisSpacing: 10.0,
-                crossAxisCount: 2,
-                children: <Widget>[
-                  new GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Detail()),
-                        );
-                      },
-                      child: new Card(
-                        child: Image.asset(
-                          'assets/chiken.jpg',
-                          fit: BoxFit.fill,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ))
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: _children[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped, // new
+        currentIndex: _currentIndex, // this will be set when a new tab is tapped
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.android),
+            title: new Text('Ciken'),
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.apps),
+            title: new Text('Spagety'),
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.cloud_circle),
+              title: Text('Fish n Chips')
+          )
+        ],
       ),
+
     );
   }
-}
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }}
 
 class Detail extends StatelessWidget {
   @override
@@ -66,7 +66,7 @@ class Detail extends StatelessWidget {
         ),
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Image.asset(
-            'assets/chiken.jpg',
+            'images/chiken.jpg',
             fit: BoxFit.fill,
           ),
           Container(
