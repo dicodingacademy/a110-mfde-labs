@@ -68,4 +68,6 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
 
   assets:
-  - images/chiken.jpg
+  - assets/chiken.jpg
+  - assets/sphageti.jpg
+  - assets/fish.jpg
