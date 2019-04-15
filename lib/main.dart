@@ -33,10 +33,10 @@ class MyApp extends StatelessWidget{
         ),
       ),
       body: Hero(
-        tag: 'educa62Logo',
+        tag: 'flutterLogo',
         child: GestureDetector(
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HeroExamplePage())),
-          child: Image.asset("images/educa62.png", width: 250.0, height: 100.0,),
+          child: Image.asset("images/flutter.png", width: 250.0, height: 100.0,),
         ),
       ),
     );
@@ -52,8 +52,8 @@ class HeroExamplePage extends StatelessWidget {
       ),
       body: Center(
         child: Hero(
-          tag: 'educa62Logo',
-          child: Image.asset("images/educa62.png"),
+          tag: 'flutterLogo',
+          child: Image.asset("images/flutter.png"),
         ),
       ),
     );
